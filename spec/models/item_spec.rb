@@ -108,6 +108,24 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Price is Out of settign range")
       end
+
+      it '半角英数字混同では出品できない' do
+        @item.price = '111aaa'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price is Out of settign range")
+      end
+      
+      it '半角英語だけでは出品できない' do
+        @item.price = 'aaa'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price Half-width number")
+      end
+      
+      it '¥299以下では出品できない' do
+        @item.price = '299'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price is Out of settign range")
+      end
     end
   end
 end
