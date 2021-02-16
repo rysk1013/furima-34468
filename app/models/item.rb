@@ -13,11 +13,13 @@ class Item < ApplicationRecord
     validates :scheduled_delivery_id
     validates :price 
   end
+
+  validates :name, length: {maximum: 40}
   
-  validates :price, numericality: {greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999}
-  validates :price, format: {with: /\A[0-9]+\z/}
+  validates :price, numericality: {greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999, message: ' is Out of settign range'}
+  validates :price, format: {with: /\A[0-9]+\z/, message: 'Half-width number'}
   
-  with_options numericality: {other_than: 1} do
+  with_options numericality: {other_than: 1, message: ' Select'} do
     validates :category_id
     validates :sales_status_id
     validates :shipping_fee_id
