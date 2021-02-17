@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
-  before do 
+  before do
     @item = FactoryBot.build(:item)
   end
-  
+
   describe '商品出品' do
     context '商品出品できるとき' do
       it 'image,name,info,category_id,sales_status_id,shipping_id,prefecture_id,scheduled_delivery_id,price,user_idが存在すれば出品できる' do
@@ -22,7 +22,7 @@ RSpec.describe Item, type: :model do
       it 'nameが40文字以上では出品できない' do
         @item.name = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Name is too long (maximum is 40 characters)")
+        expect(@item.errors.full_messages).to include('Name is too long (maximum is 40 characters)')
       end
 
       it 'infoが空では出品できない' do
@@ -40,7 +40,7 @@ RSpec.describe Item, type: :model do
       it 'category_idが1では出品できない' do
         @item.category_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Category Select")
+        expect(@item.errors.full_messages).to include('Category Select')
       end
 
       it 'sales_status_idが空では出品できない' do
@@ -52,7 +52,7 @@ RSpec.describe Item, type: :model do
       it 'sales_status_idが1では出品できない' do
         @item.sales_status_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Sales status Select")
+        expect(@item.errors.full_messages).to include('Sales status Select')
       end
 
       it 'shipping_fee_idが空では出品できない' do
@@ -64,7 +64,7 @@ RSpec.describe Item, type: :model do
       it 'shipping_fee_idが1では出品できない' do
         @item.shipping_fee_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Shipping fee Select")
+        expect(@item.errors.full_messages).to include('Shipping fee Select')
       end
 
       it 'prefecture_idが空では出品できない' do
@@ -76,7 +76,7 @@ RSpec.describe Item, type: :model do
       it 'prefecture_idが1では出品できない' do
         @item.prefecture_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Prefecture Select")
+        expect(@item.errors.full_messages).to include('Prefecture Select')
       end
 
       it 'scheduled_delivery_idが空では出品できない' do
@@ -88,7 +88,7 @@ RSpec.describe Item, type: :model do
       it 'scheduled_delivery_idが1では出品できない' do
         @item.scheduled_delivery_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Scheduled delivery Select")
+        expect(@item.errors.full_messages).to include('Scheduled delivery Select')
       end
 
       it 'priceが空では出品できない' do
@@ -100,31 +100,31 @@ RSpec.describe Item, type: :model do
       it 'priceが全角数字では出品できない' do
         @item.price = '１０００'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price Half-width number")
+        expect(@item.errors.full_messages).to include('Price Half-width number')
       end
 
       it 'priceが¥10,000,000以上では出品できない' do
-        @item.price = 100000000
+        @item.price = 100_000_000
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price is Out of settign range")
+        expect(@item.errors.full_messages).to include('Price is Out of settign range')
       end
 
       it 'priceが¥299以下では出品できない' do
         @item.price = 299
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price is Out of settign range")
+        expect(@item.errors.full_messages).to include('Price is Out of settign range')
       end
 
       it '半角英数字混同では出品できない' do
         @item.price = '111aaa'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price is Out of settign range")
+        expect(@item.errors.full_messages).to include('Price is Out of settign range')
       end
-      
+
       it '半角英語だけでは出品できない' do
         @item.price = 'aaa'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price Half-width number")
+        expect(@item.errors.full_messages).to include('Price Half-width number')
       end
     end
   end
