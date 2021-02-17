@@ -25,7 +25,12 @@ class Item < ApplicationRecord
   end
   
   validates :price, numericality: {greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999, message: 'is Out of settign range'}
-  
+
   extend ActiveHash::Associations::ActiveRecordExtensions
-  belongs_to :category, :sales_status, :shipping_fee, :prefecture, :scheduled_delivery
+  belongs_to :category
+  belongs_to :sales_status
+  belongs_to :shipping_fee
+  belongs_to :prefecture 
+  belongs_to :scheduled_delivery
 end
+  
