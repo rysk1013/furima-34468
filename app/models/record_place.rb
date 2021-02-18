@@ -14,7 +14,7 @@ class RecordPlace
   end
 
   def save
-    record = Record.create(user_id: current_user.id, item_id: params[:id])
+    record = Record.create(user_id: user_id, item_id: params[:id])
 
     Address.create(postal_code: postal_code, prefecture_id: prefecture_id, city: city, building: building, phone_number: phone_number, record_id: record.id)
   end
