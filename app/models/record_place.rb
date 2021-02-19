@@ -1,6 +1,6 @@
 class RecordPlace
   include ActiveModel::Model
-  attr_accessor :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :record_id, :user_id, :item_id
+  attr_accessor :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :user_id, :item_id, :record_id
 
   with_options presence: true do
     validates :postal_code, format: {with: /\A[0-9]{3}-[0-9]{4}\z/}
@@ -8,14 +8,13 @@ class RecordPlace
     validates :city
     validates :address
     validates :phone_number
-    validates :record_id
     validates :user_id
     validates :item_id
   end
 
   def save
-    record = Record.create(user_id: user_id, item_id: params[:id])
+    record = Record.create(user_id: user_id, item_id: item_id)
 
-    Address.create(postal_code: postal_code, prefecture_id: prefecture_id, city: city, building: building, phone_number: phone_number, record_id: record.id)
+    Place.create(postal_code: postal_code, prefecture_id: prefecture_id, city: city, address: address, building: building, phone_number: phone_number, record_id: record.id)
   end
 end
