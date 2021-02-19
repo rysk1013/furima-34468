@@ -1,4 +1,7 @@
 class RecordsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :forbid_seller
+
   def index
     @item = Item.find(params[:item_id])
     @record_place = RecordPlace.new
@@ -20,4 +23,13 @@ class RecordsController < ApplicationController
   def record_place_params
     params.require(:record_place).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id])
   end
+
+  def forbid_seller
+    item = Item.find(params[:item_id])
+    if current_user.id == item.user_id
+      redirect_to root_path
+    end
+  end
+
+  
 end
