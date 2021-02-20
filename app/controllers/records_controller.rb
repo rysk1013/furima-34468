@@ -10,6 +10,7 @@ class RecordsController < ApplicationController
   def create
     @record_place = RecordPlace.new(record_place_params)
     if @record_place.valid?
+      pay_item
       @record_place.save
       redirect_to root_path
     else
@@ -21,7 +22,7 @@ class RecordsController < ApplicationController
   private
 
   def record_place_params
-    params.require(:record_place).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id])
+    params.require(:record_place).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
   end
 
   def forbid_seller
@@ -31,5 +32,12 @@ class RecordsController < ApplicationController
     end
   end
 
-  
+  def pay_item
+    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp::Charge.create(
+      amount: Item.find(params[:item_id]).price,
+      card: record_place_params[:token],
+      currency: 'jpy'
+    )
+  end
 end
