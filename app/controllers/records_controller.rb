@@ -1,6 +1,7 @@
 class RecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :forbid_seller
+  before_action :soldout_access_restrictions
 
   def index
     @item = Item.find(params[:item_id])
@@ -39,5 +40,12 @@ class RecordsController < ApplicationController
       card: record_place_params[:token],
       currency: 'jpy'
     )
+  end
+
+  def soldout_access_restrictions
+    item = Item.find(params[:item_id])
+    if Record.find_by(item_id: item.id).present?
+      redirect_to root_path
+    end
   end
 end

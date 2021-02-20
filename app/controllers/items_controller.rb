@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :access_restrictions, only: [:edit, :update, :destroy]
+  before_action :item_access_restrictions, only: [:edit, :update, :destroy]
   before_action :set_item, except: [:index, :new, :create, :destroy]
 
   def index
@@ -47,7 +47,7 @@ class ItemsController < ApplicationController
                                  :scheduled_delivery_id, :price).merge(user_id: current_user.id)
   end
 
-  def access_restrictions
+  def item_access_restrictions
     item = Item.find(params[:id])
     redirect_to action: :index unless current_user.id == item.user_id
   end
