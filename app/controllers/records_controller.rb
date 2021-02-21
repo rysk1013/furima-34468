@@ -23,18 +23,18 @@ class RecordsController < ApplicationController
   private
 
   def record_place_params
-    params.require(:record_place).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
+    params.require(:record_place).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(
+      user_id: current_user.id, item_id: params[:item_id], token: params[:token]
+    )
   end
 
   def forbid_seller
     item = Item.find(params[:item_id])
-    if current_user.id == item.user_id
-      redirect_to root_path
-    end
+    redirect_to root_path if current_user.id == item.user_id
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
       amount: Item.find(params[:item_id]).price,
       card: record_place_params[:token],
@@ -44,8 +44,6 @@ class RecordsController < ApplicationController
 
   def soldout_access_restrictions
     item = Item.find(params[:item_id])
-    if Record.find_by(item_id: item.id).present?
-      redirect_to root_path
-    end
+    redirect_to root_path if Record.find_by(item_id: item.id).present?
   end
 end
