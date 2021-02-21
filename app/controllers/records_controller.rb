@@ -2,9 +2,9 @@ class RecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :forbid_seller
   before_action :soldout_access_restrictions
+  before_action :set_item, only: [:index, :create]
 
   def index
-    @item = Item.find(params[:item_id])
     @record_place = RecordPlace.new
   end
 
@@ -15,7 +15,6 @@ class RecordsController < ApplicationController
       @record_place.save
       redirect_to root_path
     else
-      @item = Item.find(params[:item_id])
       render :index
     end
   end
@@ -28,11 +27,6 @@ class RecordsController < ApplicationController
     )
   end
 
-  def forbid_seller
-    item = Item.find(params[:item_id])
-    redirect_to root_path if current_user.id == item.user_id
-  end
-
   def pay_item
     Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
@@ -42,8 +36,17 @@ class RecordsController < ApplicationController
     )
   end
 
+  def forbid_seller
+    item = Item.find(params[:item_id])
+    redirect_to root_path if current_user.id == item.user_id
+  end
+
   def soldout_access_restrictions
     item = Item.find(params[:item_id])
     redirect_to root_path if Record.find_by(item_id: item.id).present?
+  end
+
+  def set_item
+    @item = Item.find(params[:item_id])
   end
 end
