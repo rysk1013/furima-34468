@@ -9,7 +9,7 @@
     <div class="item-img-content">
       <%= image_tag @item.image ,class:"item-box-img" %>
 
-      <% if Record.find_by(item_id: @item.id).present? %>
+      <% if Record.includes(:item).where(item_id: @item.id).present? %>
         <div class="sold-out">
           <span>Sold Out!!</span>
         </div>
@@ -25,7 +25,7 @@
       </span>
     </div>
     
-    <% if user_signed_in? && Record.find_by(item_id: @item.id) == nil %>
+    <% if user_signed_in? && Record.includes(:item).where(item_id: @item.id).empty? %>
       <% if current_user.id == @item.user_id %>
         <%= link_to "商品の編集", edit_item_path(@item.id), method: :get, class: "item-red-btn" %>
         <p class="or-text">or</p>
