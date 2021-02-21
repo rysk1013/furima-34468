@@ -49,9 +49,8 @@ class ItemsController < ApplicationController
 
   def item_access_restrictions
     item = Item.find(params[:id])
-    if user_signed_in?
-      redirect_to action: :index unless current_user.id == item.user_id
-    end
+    record = Record.includes(:item).where(item_id: item.id)
+    redirect_to action: :index if current_user.id == item.user_id || record.present?
   end
 
   def set_item
