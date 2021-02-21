@@ -1,7 +1,6 @@
 class RecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :forbid_seller
-  before_action :soldout_access_restrictions
+  before_action :access_restrictions
   before_action :set_item, only: [:index, :create]
 
   def index
@@ -36,17 +35,12 @@ class RecordsController < ApplicationController
     )
   end
 
-  def forbid_seller
-    item = Item.find(params[:item_id])
-    redirect_to root_path if current_user.id == item.user_id
-  end
-
-  def soldout_access_restrictions
-    item = Item.find(params[:item_id])
-    redirect_to root_path if Record.find_by(item_id: item.id).present?
-  end
-
   def set_item
     @item = Item.find(params[:item_id])
+  end
+
+  def access_restrictions
+    item = Item.find(params[:item_id])
+    redirect_to root_path if current_user.id == item.user_id || Record.find_by(item_id: item.id).present?
   end
 end
