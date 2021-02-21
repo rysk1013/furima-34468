@@ -41,6 +41,7 @@ class RecordsController < ApplicationController
 
   def access_restrictions
     item = Item.find(params[:item_id])
-    redirect_to root_path if current_user.id == item.user_id || Record.find_by(item_id: item.id).present?
+    record = Record.includes(:item).where(item_id: item.id)
+    redirect_to root_path if current_user.id == item.user_id || record.present?
   end
 end
