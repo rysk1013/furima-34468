@@ -11,6 +11,11 @@ RSpec.describe RecordPlace, type: :model do
       it 'price,token,postal_code,prefecture_id,city,adress,phone_numberが存在すれば購入できる' do
         expect(@buyer).to be_valid
       end
+
+      it 'buildingが空でも購入できる' do 
+        @buyer.building = ''
+        expect(@buyer).to be_valid
+      end
     end
 
     context '商品購入できないとき' do
@@ -72,6 +77,18 @@ RSpec.describe RecordPlace, type: :model do
         @buyer.phone_number = 'aaabbbbcccc'
         @buyer.valid?
         expect(@buyer.errors.full_messages).to include('Phone number Input only number')
+      end
+
+      it 'user_idが空では購入できない' do
+        @buyer.user_id = ''
+        @buyer.valid?
+        expect(@buyer.errors.full_messages).to include("User can't be blank")
+      end
+
+      it 'item_idが空では購入できない' do
+        @buyer.item_id = ''
+        @buyer.valid?
+        expect(@buyer.errors.full_messages).to include("Item can't be blank")
       end
     end
   end
