@@ -2,8 +2,11 @@ require 'rails_helper'
 
 RSpec.describe RecordPlace, type: :model do
   before do
+    @user = FactoryBot.create(:user)
     @item = FactoryBot.create(:item)
     @buyer = FactoryBot.build(:record_place)
+    @buyer.user_id = @user.id
+    @buyer.item_id = @item.id
   end
 
   describe '商品購入' do
@@ -12,7 +15,7 @@ RSpec.describe RecordPlace, type: :model do
         expect(@buyer).to be_valid
       end
 
-      it 'buildingが空でも購入できる' do 
+      it 'buildingが空でも購入できる' do
         @buyer.building = ''
         expect(@buyer).to be_valid
       end
