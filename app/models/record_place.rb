@@ -1,6 +1,6 @@
 class RecordPlace
   include ActiveModel::Model
-  attr_accessor :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :user_id, :item_id, :record_id, :token
+  attr_accessor :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :user_id, :item_id, :token
 
   with_options presence: true do
     validates :token
