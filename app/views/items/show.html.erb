@@ -9,7 +9,7 @@
     <div class="item-img-content">
       <%= image_tag @item.image ,class:"item-box-img" %>
 
-      <% if Record.includes(:item).where(item_id: @item.id).present? %>
+      <% if @item.record.present? %>
         <div class="sold-out">
           <span>Sold Out!!</span>
         </div>
