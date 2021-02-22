@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :item_access_restrictions, only: [:edit, :update, :destroy]
   before_action :set_item, except: [:index, :new, :create, :destroy]
+  before_action :item_access_restrictions, only: [:edit, :update, :destroy]
 
   def index
     @items = Item.includes(:user).order(created_at: :desc)
@@ -47,13 +47,11 @@ class ItemsController < ApplicationController
                                  :scheduled_delivery_id, :price).merge(user_id: current_user.id)
   end
 
-  def item_access_restrictions
-    item = Item.find(params[:id])
-    record = Record.includes(:item).where(item_id: item.id)
-    redirect_to action: :index if current_user.id == item.user_id || record.present?
-  end
-
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def item_access_restrictions
+    redirect_to action: :index if current_user.id == @item.user_id || @item.record.present?
   end
 end

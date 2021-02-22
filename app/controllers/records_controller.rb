@@ -1,7 +1,7 @@
 class RecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :access_restrictions
   before_action :set_item, only: [:index, :create]
+  before_action :access_restrictions
 
   def index
     @record_place = RecordPlace.new
@@ -40,8 +40,6 @@ class RecordsController < ApplicationController
   end
 
   def access_restrictions
-    item = Item.find(params[:item_id])
-    record = Record.includes(:item).where(item_id: item.id)
-    redirect_to root_path if current_user.id == item.user_id || record.present?
+    redirect_to root_path if current_user.id == @item.user_id || @item.record.present?
   end
 end
