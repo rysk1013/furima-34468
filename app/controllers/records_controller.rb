@@ -40,6 +40,7 @@ class RecordsController < ApplicationController
   end
 
   def access_restrictions
-    redirect_to root_path if current_user.id == @item.user_id || @item.record.present?
+    item = Item.find(params[:item_id])
+    redirect_to root_path if current_user.id == item.user_id || item.record.present?
   end
 end
