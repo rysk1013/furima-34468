@@ -51,6 +51,7 @@ class ItemsController < ApplicationController
   end
 
   def item_access_restrictions
-    redirect_to action: :index if current_user.id != @item.user_id || @item.record.present?
+    item = Item.find(params[:id])
+    redirect_to action: :index if current_user.id != item.user_id || item.record.present?
   end
 end
